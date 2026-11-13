@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProbashiMate Italy - Essential</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='1' height='2' fill='%23009246'/><rect x='1' width='1' height='2' fill='%23FFFFFF'/><rect x='2' width='1' height='2' fill='%23CE2B37'/></svg>">
+<style>
+  :root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #d4af37;
+    --accent-hover: #b4941f;
+    --border: #334155;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #22c55e;
+  }
+  [data-theme="light"] {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-color: #0f172a;
+    --text-muted: #64748b;
+    --accent: #b8860b;
+    --accent-hover: #996515;
+    --border: #e2e8f0;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --success: #16a34a;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 15px; background: var(--bg-color); color: var(--text-color); transition: background 0.3s, color 0.3s; max-width: 600px; margin-inline: auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  h1 { font-size: 20px; color: var(--accent); margin: 0; display: flex; align-items: center; gap: 8px; }
+  h3 { margin-top: 0; font-size: 16px; display: flex; align-items: center; gap: 6px; }
+  .theme-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+
+  .tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; margin-bottom: 15px; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 9px 12px; background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 500; white-space: nowrap; transition: all 0.2s; }
+  .tab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+  .content { display: none; }
+  .content.active { display: block; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+  .form-input { padding: 10px; margin: 6px 0; width: 100%; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); font-size: 14px; }
+  .submit-btn, .reset-btn { width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; border: none; margin-top: 8px; font-weight: 600; font-size: 14px; transition: opacity 0.2s; }
+  .submit-btn { background: var(--accent); color: #000; }
+  .submit-btn:hover { opacity: 0.9; }
+  .reset-btn { background: var(--danger); color: white; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+  .summary-box { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 10px; }
+  .summary-box.full { grid-column: span 2; border-color: var(--accent); }
+  .summary-box span { font-size: 12px; color: var(--text-muted); display: block; }
+  .summary-box strong { font-size: 18px; color: var(--accent); }
+
+  /* Cash Box UI */
+  .cash-card { background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); border: 1px solid var(--success); border-radius: 12px; padding: 15px; color: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
+  .cash-amount { font-size: 24px; font-weight: bold; color: #4ade80; margin-top: 4px; }
+
+  /* Bank Card UI */
+  .bank-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-top: 10px; position: relative; color: #f8fafc; }
+  .bank-card-header { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .bank-name { font-weight: bold; font-size: 16px; color: var(--accent); }
+  .card-num { font-family: monospace; font-size: 14px; letter-spacing: 2px; color: #cbd5e1; margin: 6px 0; }
+  .card-bal { font-size: 22px; font-weight: bold; color: var(--success); }
+
+  .detect-notice { background: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); color: var(--success); padding: 8px 10px; border-radius: 8px; font-size: 12px; margin: 4px 0; display: none; }
+
+  /* Progress Bar */
+  .progress-bar { width: 100%; background: var(--border); border-radius: 6px; overflow: hidden; margin-top: 6px; height: 10px; }
+  .progress-bar-inner { height: 100%; background: var(--success); width: 0%; transition: width 0.3s; }
+  .progress-bar-inner.spend { background: var(--danger); }
+
+  /* Alerts & Badges */
+  .alert-banner { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: var(--danger); padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; }
+  .alert-banner.warning { background: rgba(245, 158, 11, 0.15); border-color: var(--warning); color: var(--warning); }
+  .badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; }
+  .badge-ok { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+  .badge-warn { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+  .badge-exp { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+  .badge-src { background: rgba(212, 175, 55, 0.18); color: var(--accent); }
+  .badge-pabo { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+  .badge-dibo { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+  .item-row { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 10px; background: var(--bg-color); }
+  .item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .small-btn { padding: 6px 9px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-color); cursor: pointer; font-size: 12px; font-weight: 600; }
+  .small-btn.danger { border-color: var(--danger); color: var(--danger); }
+  .small-btn.success { border-color: var(--success); color: var(--success); }
+  .small-btn.accent { border-color: var(--accent); color: var(--accent); }
+
+  /* Quick Tag Chips */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+  .chip { padding: 5px 10px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-muted); font-size: 12px; cursor: pointer; }
+  .chip:hover, .chip:active { border-color: var(--accent); color: var(--accent); }
+
+  /* Modal */
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
+  .modal-content { background: var(--card-bg); border: 1px solid var(--border); padding: 18px; border-radius: 12px; max-width: 480px; width: 100%; max-height: 90vh; overflow: auto; }
+  .modal-content img { max-width: 100%; border-radius: 8px; margin-top: 10px; }
+  .modal-content iframe { width: 100%; height: 60vh; border: none; margin-top: 10px; border-radius: 8px; }
+
+  /* PIN Lock Screen */
+  #pinLockScreen { position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+  .pin-dots { display: flex; gap: 12px; margin-bottom: 20px; }
+  .pin-dot { width: 16px; height: 16px; border: 2px solid var(--accent); border-radius: 50%; }
+  .pin-dot.filled { background: var(--accent); }
+  .pin-pad { display: grid; grid-template-columns: repeat(3, 70px); gap: 15px; }
+  .pin-key { height: 70px; background: var(--card-bg); border: 1px solid var(--border); color: var(--text-color); font-size: 22px; font-weight: bold; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
+  .pin-key:active { background: var(--accent); color: #000; }
+</style>
+</head>
+<body>
+
+<!-- PIN Lock Screen -->
+<div id="pinLockScreen" style="display:none;">
+  <h2>🔒 Enter Security PIN</h2>
+  <p style="color:var(--text-muted); font-size:13px;">Default PIN is 1234</p>
+  <div class="pin-dots">
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+    <div class="pin-dot" id="d4"></div>
+  </div>
+  <div class="pin-pad">
+    <div class="pin-key" onclick="pressPin('1')">1</div>
+    <div class="pin-key" onclick="pressPin('2')">2</div>
+    <div class="pin-key" onclick="pressPin('3')">3</div>
+    <div class="pin-key" onclick="pressPin('4')">4</div>
+    <div class="pin-key" onclick="pressPin('5')">5</div>
+    <div class="pin-key" onclick="pressPin('6')">6</div>
+    <div class="pin-key" onclick="pressPin('7')">7</div>
+    <div class="pin-key" onclick="pressPin('8')">8</div>
+    <div class="pin-key" onclick="pressPin('9')">9</div>
+    <div class="pin-key" onclick="pressPin('0')">0</div>
+    <div class="pin-key" onclick="clearPin()" style="font-size:14px;">C</div>
+  </div>
+</div>
+
+<!-- File Preview Modal -->
+<div id="previewModal" class="modal" onclick="closeModal('previewModal', event)">
+  <div class="modal-content" style="text-align:center;" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong id="modalTitle">Document Preview</strong>
+      <button class="small-btn danger" onclick="document.getElementById('previewModal').style.display='none'">Close ✖</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Spend / Expense Modal -->
+<div id="spendModal" class="modal" onclick="closeModal('spendModal', event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <strong id="spendModalTitle" style="color:var(--accent); font-size:16px;">💸 Record Expense</strong>
+      <button class="small-btn danger" onclick="document.getElementById('spendModal').style.display='none'">✖</button>
+    </div>
+    <p id="spendSourceInfo" style="font-size:12px; color:var(--text-muted); margin-top:0;"></p>
+    
+    <label style="font-size:12px; color:var(--text-muted);">Amount Spent (€):</label>
+    <input type="number" step="0.01" id="spendAmt" class="form-input" placeholder="e.g. 25.50">
+    
+    <label style="font-size:12px; color:var(--text-muted);">Where / What did you spend on?</label>
+    <input type="text" id="spendWhere" class="form-input" placeholder="e.g. Supermercato, Rent, Coffee, Mobile, Ticket">
+    <div class="chip-group">
+      <span class="chip" onclick="setSpendTag('🛒 Supermercato')">🛒 Supermercato</span>
+      <span class="chip" onclick="setSpendTag('🏠 Room Rent')">🏠 Room Rent</span>
+      <span class="chip" onclick="setSpendTag('🍽️ Food / Coffee')">🍽️ Food / Coffee</span>
+      <span class="chip" onclick="setSpendTag('🚌 Transport / Ticket')">🚌 Transport</span>
+      <span class="chip" onclick="setSpendTag('📱 Mobile / WiFi')">📱 Mobile / WiFi</span>
+      <span class="chip" onclick="setSpendTag('🇧🇩 Remittance / BD')">🇧🇩 Remittance</span>
+      <span class="chip" onclick="setSpendTag('🛍️ Shopping')">🛍️ Shopping</span>
+    </div>
+
+    <label style="font-size:12px; color:var(--text-muted);">Date:</label>
+    <input type="date" id="spendDate" class="form-input">
+
+    <button class="submit-btn" style="background:var(--danger); color:#fff; margin-top:12px;" onclick="confirmSpend()">✅ Confirm & Deduct Balance</button>
+  </div>
+</div>
+
+<!-- Settle Loan Modal (When someone pays you or you pay someone) -->
+<div id="settleModal" class="modal" onclick="closeModal('settleModal', event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <strong id="settleModalTitle" style="color:var(--accent); font-size:16px;">🤝 Settle / Receive Money</strong>
+      <button class="small-btn danger" onclick="document.getElementById('settleModal').style.display='none'">✖</button>
+    </div>
+    <p id="settleInfo" style="font-size:13px; color:var(--text-muted); margin-top:0;"></p>
+
+    <label style="font-size:12px; color:var(--text-muted);">Amount (€):</label>
+    <input type="number" step="0.01" id="settleAmt" class="form-input" placeholder="e.g. 50">
+
+    <label style="font-size:12px; color:var(--text-muted);">Where should this money go / come from?</label>
+    <select id="settleDestination" class="form-input">
+      <option value="cash">💵 Cash in Hand</option>
+      <!-- Bank options will be injected dynamically -->
+    </select>
+
+    <button class="submit-btn" style="background:var(--success); color:#000; margin-top:12px;" onclick="confirmSettle()">✅ Confirm & Update Balance</button>
+  </div>
+</div>
+
+<header>
+  <h1>🇮🇹 ProbashiMate <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">Essential</span></h1>
+  <button class="theme-btn" onclick="toggleTheme()">☀️ / 🌙</button>
+</header>
+
+<!-- Navigation Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('home', this)">🏠 Home</div>
+  <div class="tab" onclick="switchTab('banks', this)">💳 Wallet</div>
+  <div class="tab" onclick="switchTab('loans', this)">🤝 Lent & Borrow</div>
+  <div class="tab" onclick="switchTab('summary', this)">📊 Summary</div>
+  <div class="tab" onclick="switchTab('docs', this)">📄 My Docs</div>
+  <div class="tab" onclick="switchTab('appts', this)">📅 Appts</div>
+  <div class="tab" onclick="switchTab('contacts', this)">⚖️ Lawyer</div>
+  <div class="tab" onclick="switchTab('backup', this)">☁️ Backup</div>
+</div>
+
+<!-- 1. HOME / DASHBOARD -->
+<div class="content active" id="homeContent">
+  <div id="expiryAlertsArea"></div>
+
+  <div class="summary-grid">
+    <div class="summary-box full">
+      <span>Total Available Balance (Banks + Cash)</span>
+      <strong id="dashGrandTotal" style="font-size:22px; color:var(--success);">€0.00</strong>
+    </div>
+    <div class="summary-box">
+      <span>💳 Total Bank Balance</span>
+      <strong id="dashTotalBank">€0.00</strong>
+    </div>
+    <div class="summary-box">
+      <span>💵 Cash in Hand</span>
+      <strong id="dashTotalCash" style="color:#4ade80;">€0.00</strong>
+    </div>
+    <div class="summary-box">
+      <span>💸 This Month Spent</span>
+      <strong id="dashMonthSpent" style="color:var(--danger);">€0.00</strong>
+    </div>
+    <div class="summary-box">
+      <span>🐷 Piggy Bank Saved</span>
+      <strong id="dashTotalPiggy">€0.00</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📅 Upcoming Appointments</h3>
+    <div id="dashApptList" style="font-size:13px; color:var(--text-muted);">No upcoming appointments.</div>
+  </div>
+
+  <div class="card">
+    <h3>⚠️ Document Status Summary</h3>
+    <div id="dashDocStatus" style="font-size:13px; color:var(--text-muted);">No documents uploaded yet.</div>
+  </div>
+</div>
+
+<!-- 2. WALLET (CASH + BANKS) & PIGGY BANK -->
+<div class="content" id="banksContent">
+  <!-- Cash in Hand Section -->
+  <div class="card">
+    <h3>💵 Cash in Hand (Pocket / Home Euro)</h3>
+    <div class="cash-card">
+      <div>
+        <span style="font-size:12px; color:#a7f3d0;">Available Physical Cash</span>
+        <div class="cash-amount" id="cashDisplay">€0.00</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <button class="small-btn success" onclick="adjustCash('set')">✏️ Set Cash</button>
+        <div style="display:flex; gap:5px;">
+          <button class="small-btn success" onclick="adjustCash('add')">+ Add</button>
+          <button class="small-btn danger" onclick="openSpendModal('cash', -1)">- Spend €</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bank Cards Section -->
+  <div class="card">
+    <h3>💳 My Bank Cards & Balances</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:0;">If a bank/card already exists, typing its name or number will auto-detect it and <b>add (+)</b> the new amount to your previous balance.</p>
+    <input type="text" id="bankName" class="form-input" placeholder="Bank / Card Name (e.g. PostePay, UniCredit)" oninput="checkExistingBank()">
+    <input type="text" id="cardLast4" maxlength="19" class="form-input" placeholder="Card Number or Last 4 Digits (e.g. **** 4521)" oninput="checkExistingBank()">
+    <div id="bankDetectNotice" class="detect-notice"></div>
+    <input type="number" step="0.01" id="bankBal" class="form-input" placeholder="Amount to Add / Initial Balance (€)">
+    <button class="submit-btn" id="bankSubmitBtn" onclick="saveBank()">+ Add New Card</button>
+    <div id="bankList"></div>
+  </div>
+
+  <!-- Piggy Bank Section -->
+  <div class="card">
+    <h3>🐷 Piggy Bank (Dream Goals)</h3>
+    <input type="text" id="goalTitle" class="form-input" placeholder="Dream Goal (e.g. Bari kora, New Phone, Family)">
+    <input type="number" step="0.01" id="goalTarget" class="form-input" placeholder="Target Amount (€)">
+    <input type="number" step="0.01" id="goalSaved" class="form-input" placeholder="Already Saved (€)">
+    <button class="submit-btn" onclick="saveGoal()">+ Create / Update Dream Goal</button>
+    <div id="goalList"></div>
+  </div>
+</div>
+
+<!-- 3. LENT & BORROW (Dena-Paona Tracker) -->
+<div class="content" id="loansContent">
+  <div class="card">
+    <h3>🤝 Add Lent / Borrow Record</h3>
+    <select id="loanType" class="form-input">
+      <option value="pabo">🟢 Lent to someone (Kar kache Pabo)</option>
+      <option value="dibo">🔴 Borrowed from someone (Kar kache Dibo / Denar)</option>
+    </select>
+    <input type="text" id="loanPerson" class="form-input" placeholder="Person Name (e.g. Rahim Bhai)">
+    <input type="number" step="0.01" id="loanAmt" class="form-input" placeholder="Total Amount (€)">
+    <input type="text" id="loanNote" class="form-input" placeholder="Note / Reason (Optional, e.g. Loan for ticket)">
+    <button class="submit-btn" onclick="saveLoan()">+ Save Record</button>
+  </div>
+
+  <div class="card">
+    <h3>📋 Active Lent & Borrow List</h3>
+    <div id="loanList"></div>
+  </div>
+</div>
+
+<!-- 4. EXPENSE SUMMARY -->
+<div class="content" id="summaryContent">
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+      <h3 style="margin:0;" id="summaryHeading">📊 Running Month Summary</h3>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <input type="date" id="summaryDatePicker" class="form-input" style="width:auto; margin:0; padding:6px 10px;" onchange="renderExpenseSummary()">
+        <button id="resetDateFilterBtn" class="small-btn accent" style="display:none; padding:7px 10px;" onclick="clearSummaryDateFilter()">This Month</button>
+      </div>
+    </div>
+    <p id="summarySubtext" style="font-size:12px; color:var(--text-muted); margin-top:0;">Showing running month summary (Banks + Cash). Select a date above to check a specific day.</p>
+
+    <div class="summary-grid" style="margin-bottom:0;">
+      <div class="summary-box full" style="border-color:var(--danger);">
+        <span id="sumTotalLabel">Total Spent (Running Month)</span>
+        <strong id="sumPeriodTotal" style="font-size:22px; color:var(--danger);">€0.00</strong>
+      </div>
+      <div class="summary-box">
+        <span>💳 Spent via Banks/Cards</span>
+        <strong id="sumPeriodBank">€0.00</strong>
+      </div>
+      <div class="summary-box">
+        <span>💵 Spent via Cash</span>
+        <strong id="sumPeriodCash" style="color:#4ade80;">€0.00</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="breakdownHeading">📍 Where You Spent (Running Month)</h3>
+    <div id="sumCategoryBreakdown"></div>
+  </div>
+
+  <div class="card" id="dateDetailsCard" style="display:none;">
+    <h3 id="dateDetailsHeading">🧾 Transactions on Selected Date</h3>
+    <div id="sumDateHistory"></div>
+  </div>
+</div>
+
+<!-- 5. DOCUMENT VAULT & EXPIRY REMINDER -->
+<div class="content" id="docsContent">
+  <div class="card">
+    <h3>📄 Upload & Track Documents</h3>
+    <input type="text" id="docName" class="form-input" placeholder="Document Name (e.g. Permesso di Soggiorno, Passport, Carta d'Identità)">
+    <label style="font-size:12px; color:var(--text-muted); display:block; margin-top:6px;">Expiry Date (Meyad Ses Date):</label>
+    <input type="date" id="docExpiry" class="form-input">
+    <label style="font-size:12px; color:var(--text-muted); display:block; margin-top:6px;">Upload Photo / PDF (Optional):</label>
+    <input type="file" id="docFile" accept="image/*,application/pdf" class="form-input">
+    <button class="submit-btn" onclick="saveDoc()">💾 Save Document</button>
+  </div>
+
+  <div class="card">
+    <h3>🗂️ Saved Documents</h3>
+    <div id="docList"></div>
+  </div>
+</div>
+
+<!-- 6. APPOINTMENT TRACKER -->
+<div class="content" id="apptsContent">
+  <div class="card">
+    <h3>📅 Add New Appointment</h3>
+    <input type="text" id="apptTitle" class="form-input" placeholder="Purpose (e.g. Questura Fingerprints, Dottore, Comune)">
+    <input type="date" id="apptDate" class="form-input">
+    <input type="time" id="apptTime" class="form-input">
+    <input type="text" id="apptLocation" class="form-input" placeholder="Location / Address (Optional)">
+    <button class="submit-btn" onclick="saveAppt()">+ Save Appointment</button>
+  </div>
+
+  <div class="card">
+    <h3>🗓️ My Appointments</h3>
+    <div id="apptList"></div>
+  </div>
+</div>
+
+<!-- 7. LAWYER INFO & ITALY EMERGENCY -->
+<div class="content" id="contactsContent">
+  <div class="card">
+    <h3>⚖️ My Lawyer (Avvocato) Info</h3>
+    <input type="text" id="lawyerName" class="form-input" placeholder="Lawyer Name">
+    <input type="tel" id="lawyerPhone" class="form-input" placeholder="Phone / WhatsApp Number">
+    <input type="text" id="lawyerAddress" class="form-input" placeholder="Studio / Office Address">
+    <input type="text" id="lawyerNote" class="form-input" placeholder="Case Note / Reference">
+    <button class="submit-btn" onclick="saveLawyer()">💾 Save Lawyer Info</button>
+    <div id="lawyerDisplay" style="margin-top:12px;"></div>
+  </div>
+
+  <div class="card">
+    <h3>🚨 Italy Emergency Contacts</h3>
+    <button class="submit-btn" style="background:#dc2626; color:#fff; margin-bottom:8px;" onclick="window.location.href='tel:112'">🚓 Carabinieri / Emergency (112)</button>
+    <button class="submit-btn" style="background:#ea580c; color:#fff; margin-bottom:8px;" onclick="window.location.href='tel:118'">🚑 Ambulance / Pronto Soccorso (118)</button>
+    <button class="submit-btn" style="background:#b91c1c; color:#fff; margin-bottom:8px;" onclick="window.location.href='tel:115'">🚒 Fire Brigade / Vigili del Fuoco (115)</button>
+    <button class="submit-btn" style="background:#1d4ed8; color:#fff;" onclick="window.location.href='tel:113'">👮 Polizia di Stato (113)</button>
+  </div>
+</div>
+
+<!-- 8. BACKUP & SECURITY -->
+<div class="content" id="backupContent">
+  <div class="card">
+    <h3>🔒 App Security PIN</h3>
+    <input type="password" maxlength="4" id="newPinInput" class="form-input" placeholder="Set New 4-Digit PIN (Leave empty to disable)">
+    <button class="submit-btn" onclick="updatePin()">Update PIN</button>
+  </div>
+
+  <div class="card">
+    <h3>☁️ Backup & Restore System</h3>
+    <p style="font-size:13px; color:var(--text-muted); margin-top:0;">Download a backup file to keep your cards, cash, loans, summary, documents, and appointments safe.</p>
+    <button class="submit-btn" onclick="exportBackup()">📥 Download Backup (.json)</button>
+    <label style="font-size:13px; color:var(--text-muted); display:block; margin-top:15px;">Restore from Backup File:</label>
+    <input type="file" id="importFile" accept=".json" class="form-input" onchange="importBackup(event)">
+    <button class="reset-btn" style="margin-top:20px;" onclick="resetAll()">⚠️ Reset All App Data</button>
+  </div>
+</div>
+
+<script>
+  // Database Initialization
+  let db = JSON.parse(localStorage.getItem("probashiEssentialDB")) || {
+    pin: "1234",
+    cash: 0,
+    banks: [],
+    expenses: [],
+    loans: [],
+    goals: [],
+    docs: [],
+    appts: [],
+    lawyer: { name: "", phone: "", address: "", note: "" }
+  };
+
+  if (typeof db.cash !== "number") db.cash = 0;
+  if (!Array.isArray(db.expenses)) db.expenses = [];
+  if (!Array.isArray(db.loans)) db.loans = [];
+
+  let editingBankIndex = -1;
+  let activeSpendContext = { type: "cash", bankIndex: -1 };
+  let activeSettleIndex = -1;
+
+  // PIN Lock Logic
+  let enteredPin = "";
+  if (db.pin && db.pin.length === 4) {
+    document.getElementById("pinLockScreen").style.display = "flex";
+  }
+
+  function pressPin(num) {
+    enteredPin += num;
+    updatePinDots();
+    if (enteredPin.length === 4) {
+      if (enteredPin === db.pin) {
+        document.getElementById("pinLockScreen").style.display = "none";
+        enteredPin = "";
+        updatePinDots();
+      } else {
+        alert("❌ Wrong PIN! Try again.");
+        enteredPin = "";
+        updatePinDots();
+      }
+    }
+  }
+  function clearPin() { enteredPin = ""; updatePinDots(); }
+  function updatePinDots() {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById("d" + i).className = i <= enteredPin.length ? "pin-dot filled" : "pin-dot";
+    }
+  }
+  function updatePin() {
+    let p = document.getElementById("newPinInput").value.trim();
+    if (p === "" || (p.length === 4 && !isNaN(p))) {
+      db.pin = p;
+      saveDB();
+      alert(p ? "✅ PIN Updated!" : "✅ PIN Lock Disabled!");
+      document.getElementById("newPinInput").value = "";
+    } else {
+      alert("⚠️ Please enter a 4-digit number.");
+    }
+  }
+
+  // Save & Render
+  function saveDB() {
+    try {
+      localStorage.setItem("probashiEssentialDB", JSON.stringify(db));
+      renderAll();
+    } catch (e) {
+      alert("⚠️ Storage limit reached! Please export backup.");
+    }
+  }
+
+  function switchTab(tabId, el) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".content").forEach(c => c.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById(tabId + "Content").classList.add("active");
+  }
+
+  function toggleTheme() {
+    let current = document.documentElement.getAttribute("data-theme");
+    document.documentElement.setAttribute("data-theme", current === "light" ? "dark" : "light");
+  }
+
+  // Cash in Hand
+  function adjustCash(mode) {
+    if (mode === "set") {
+      let val = prompt("Enter total physical Cash in Hand (€):", db.cash);
+      if (val !== null && !isNaN(parseFloat(val))) {
+        db.cash = Math.max(0, parseFloat(val));
+        saveDB();
+      }
+    } else if (mode === "add") {
+      let val = prompt("How much Cash (€) did you add to your wallet?");
+      if (val !== null && !isNaN(parseFloat(val))) {
+        db.cash += parseFloat(val);
+        saveDB();
+      }
+    }
+  }
+
+  // Spend Modal
+  function openSpendModal(type, bankIndex) {
+    activeSpendContext = { type, bankIndex };
+    let titleEl = document.getElementById("spendModalTitle");
+    let infoEl = document.getElementById("spendSourceInfo");
+
+    if (type === "cash") {
+      titleEl.innerText = "💵 Spend from Cash in Hand";
+      infoEl.innerHTML = `Available Cash: <b style="color:var(--success);">€${db.cash.toFixed(2)}</b>`;
+    } else {
+      let b = db.banks[bankIndex];
+      titleEl.innerText = `💳 Spend from ${b.name}`;
+      infoEl.innerHTML = `Card: ${b.card || 'No No.'} | Available: <b style="color:var(--success);">€${b.bal.toFixed(2)}</b>`;
+    }
+
+    document.getElementById("spendAmt").value = "";
+    document.getElementById("spendWhere").value = "";
+    document.getElementById("spendDate").value = new Date().toISOString().slice(0, 10);
+    document.getElementById("spendModal").style.display = "flex";
+    setTimeout(() => document.getElementById("spendAmt").focus(), 100);
+  }
+
+  function setSpendTag(label) {
+    document.getElementById("spendWhere").value = label;
+  }
+
+  function confirmSpend() {
+    let amt = parseFloat(document.getElementById("spendAmt").value);
+    let where = document.getElementById("spendWhere").value.trim() || "General Expense";
+    let date = document.getElementById("spendDate").value || new Date().toISOString().slice(0, 10);
+
+    if (isNaN(amt) || amt <= 0) return alert("⚠️ Please enter a valid amount (€).");
+
+    let sourceName = "Cash in Hand";
+    let sourceType = "cash";
+
+    if (activeSpendContext.type === "cash") {
+      db.cash = Math.max(0, db.cash - amt);
+    } else {
+      let b = db.banks[activeSpendContext.bankIndex];
+      if (!b) return;
+      b.bal = Math.max(0, b.bal - amt);
+      sourceName = b.name;
+      sourceType = "bank";
+    }
+
+    db.expenses.push({ id: Date.now(), amount: amt, where, date, sourceType, sourceName });
+    db.expenses.sort((a, b) => new Date(b.date) - new Date(a.date) || b.id - a.id);
+
+    document.getElementById("spendModal").style.display = "none";
+    saveDB();
+  }
+
+  function deleteExpense(id) {
+    let idx = db.expenses.findIndex(e => e.id === id);
+    if (idx === -1) return;
+    let exp = db.expenses[idx];
+
+    if (confirm(`Delete this €${exp.amount.toFixed(2)} expense (${exp.where})?\n\nTip: Balance will be refunded.`)) {
+      if (exp.sourceType === "cash") {
+        db.cash += exp.amount;
+      } else {
+        let bIdx = db.banks.findIndex(b => b.name.toLowerCase() === exp.sourceName.toLowerCase());
+        if (bIdx !== -1) db.banks[bIdx].bal += exp.amount;
+      }
+      db.expenses.splice(idx, 1);
+      saveDB();
+    }
+  }
+
+  // Lent & Borrow (Dena-Paona Tracker)
+  function saveLoan() {
+    let type = document.getElementById("loanType").value;
+    let person = document.getElementById("loanPerson").value.trim();
+    let amt = parseFloat(document.getElementById("loanAmt").value);
+    let note = document.getElementById("loanNote").value.trim();
+
+    if (!person || isNaN(amt) || amt <= 0) return alert("⚠️ Enter Person Name and Amount.");
+
+    db.loans.push({ id: Date.now(), type, person, amt, note });
+    document.getElementById("loanPerson").value = "";
+    document.getElementById("loanAmt").value = "";
+    document.getElementById("loanNote").value = "";
+    saveDB();
+    alert(`✅ Saved record for ${person}!`);
+  }
+
+  function openSettleModal(index) {
+    activeSettleIndex = index;
+    let loan = db.loans[index];
+    let titleEl = document.getElementById("settleModalTitle");
+    let infoEl = document.getElementById("settleInfo");
+
+    if (loan.type === "pabo") {
+      titleEl.innerText = `🟢 Receive Money from ${loan.person}`;
+      infoEl.innerHTML = `Total Due: <b>€${loan.amt.toFixed(2)}</b>. When ${loan.person} returns this money, where should it go?`;
+    } else {
+      titleEl.innerText = `🔴 Pay / Clear Debt to ${loan.person}`;
+      infoEl.innerHTML = `Total Owed: <b>€${loan.amt.toFixed(2)}</b>. When you pay ${loan.person}, where will this money come from?`;
+    }
+
+    document.getElementById("settleAmt").value = loan.amt;
+
+    // Populate bank dropdown
+    let destSelect = document.getElementById("settleDestination");
+    let opts = `<option value="cash">💵 Cash in Hand</option>`;
+    db.banks.forEach((b, i) => {
+      opts += `<option value="bank_${i}">💳 ${b.name} (${b.card || 'Card'}) - €${b.bal.toFixed(2)}</option>`;
+    });
+    destSelect.innerHTML = opts;
+
+    document.getElementById("settleModal").style.display = "flex";
+  }
+
+  function confirmSettle() {
+    let loan = db.loans[activeSettleIndex];
+    let settleAmt = parseFloat(document.getElementById("settleAmt").value);
+    let dest = document.getElementById("settleDestination").value;
+
+    if (isNaN(settleAmt) || settleAmt <= 0) return alert("⚠️ Enter valid amount.");
+
+    // Update main balance
+    let destName = "Cash in Hand";
+    if (dest === "cash") {
+      if (loan.type === "pabo") db.cash += settleAmt;
+      else db.cash = Math.max(0, db.cash - settleAmt);
+    } else if (dest.startsWith("bank_")) {
+      let bIdx = parseInt(dest.split("_")[1]);
+      let bank = db.banks[bIdx];
+      if (bank) {
+        destName = bank.name;
+        if (loan.type === "pabo") bank.bal += settleAmt;
+        else bank.bal = Math.max(0, bank.bal - settleAmt);
+      }
+    }
+
+    // Update or remove loan
+    if (settleAmt >= loan.amt) {
+      db.loans.splice(activeSettleIndex, 1);
+      alert(`✅ Fully settled with ${loan.person}! Balance updated (${destName}).`);
+    } else {
+      loan.amt -= settleAmt;
+      alert(`✅ Partially settled €${settleAmt.toFixed(2)} with ${loan.person}! Remaining: €${loan.amt.toFixed(2)}. Balance updated (${destName}).`);
+    }
+
+    document.getElementById("settleModal").style.display = "none";
+    saveDB();
+  }
+
+  function deleteLoan(index) {
+    if (confirm("Delete this record without adjusting main balance?")) {
+      db.loans.splice(index, 1);
+      saveDB();
+    }
+  }
+
+  // Banks & Balances
+  function findExistingBankIndex(name, card) {
+    return db.banks.findIndex(b =>
+      (name !== "" && b.name.toLowerCase() === name.toLowerCase()) ||
+      (card !== "" && b.card.toLowerCase() === card.toLowerCase())
+    );
+  }
+
+  function checkExistingBank() {
+    if (editingBankIndex >= 0) return;
+    let name = document.getElementById("bankName").value.trim();
+    let card = document.getElementById("cardLast4").value.trim();
+    let notice = document.getElementById("bankDetectNotice");
+    let btn = document.getElementById("bankSubmitBtn");
+    let balInput = document.getElementById("bankBal");
+
+    let idx = findExistingBankIndex(name, card);
+    if (idx !== -1) {
+      let existing = db.banks[idx];
+      notice.style.display = "block";
+      notice.innerHTML = `✅ <b>${existing.name}</b> (${existing.card || 'No No.'}) detected! Current Balance: <b>€${existing.bal.toFixed(2)}</b>. New amount will be <b>added (+)</b>.`;
+      btn.innerText = `+ Add Amount to ${existing.name}`;
+      balInput.placeholder = `Amount to Add to €${existing.bal.toFixed(2)} (€)`;
+    } else {
+      notice.style.display = "none";
+      btn.innerText = "+ Add New Card";
+      balInput.placeholder = "Initial Balance (€)";
+    }
+  }
+
+  function saveBank() {
+    let name = document.getElementById("bankName").value.trim();
+    let card = document.getElementById("cardLast4").value.trim();
+    let amt = parseFloat(document.getElementById("bankBal").value);
+    if (!name || isNaN(amt)) return alert("⚠️ Enter Bank Name and Amount.");
+
+    if (editingBankIndex >= 0) {
+      db.banks[editingBankIndex] = { name, card, bal: amt };
+      editingBankIndex = -1;
+      document.getElementById("bankSubmitBtn").innerText = "+ Add New Card";
+      alert(`✅ Updated ${name} balance to €${amt.toFixed(2)}!`);
+    } else {
+      let existingIndex = findExistingBankIndex(name, card);
+      if (existingIndex !== -1) {
+        let prevBal = db.banks[existingIndex].bal;
+        db.banks[existingIndex].bal = prevBal + amt;
+        if (card) db.banks[existingIndex].card = card;
+        alert(`✅ Added €${amt.toFixed(2)} to ${db.banks[existingIndex].name}!\nPrevious: €${prevBal.toFixed(2)} ➔ New Balance: €${db.banks[existingIndex].bal.toFixed(2)}`);
+      } else {
+        db.banks.push({ name, card, bal: amt });
+      }
+    }
+
+    document.getElementById("bankName").value = "";
+    document.getElementById("cardLast4").value = "";
+    document.getElementById("bankBal").value = "";
+    document.getElementById("bankDetectNotice").style.display = "none";
+    document.getElementById("bankSubmitBtn").innerText = "+ Add New Card";
+    document.getElementById("bankBal").placeholder = "Amount to Add / Initial Balance (€)";
+    saveDB();
+  }
+
+  function quickDepositBank(index) {
+    let bank = db.banks[index];
+    let val = prompt(`How much Euro (€) did you add/deposit to ${bank.name}?`);
+    if (val !== null && !isNaN(parseFloat(val))) {
+      bank.bal += parseFloat(val);
+      saveDB();
+    }
+  }
+
+  function editBankCard(index) {
+    let b = db.banks[index];
+    document.getElementById("bankName").value = b.name;
+    document.getElementById("cardLast4").value = b.card;
+    document.getElementById("bankBal").value = b.bal;
+    editingBankIndex = index;
+    document.getElementById("bankDetectNotice").style.display = "none";
+    document.getElementById("bankSubmitBtn").innerText = `💾 Save Exact Balance for ${b.name}`;
+    document.getElementById("bankBal").placeholder = "Exact New Balance (€)";
+    document.getElementById("bankName").focus();
+  }
+
+  function deleteBank(index) {
+    if (confirm("Delete this bank card?")) {
+      if (editingBankIndex === index) {
+        editingBankIndex = -1;
+        document.getElementById("bankSubmitBtn").innerText = "+ Add New Card";
+      }
+      db.banks.splice(index, 1);
+      saveDB();
+    }
+  }
+
+  // Piggy Bank
+  function saveGoal() {
+    let title = document.getElementById("goalTitle").value.trim();
+    let target = parseFloat(document.getElementById("goalTarget").value);
+    let saved = parseFloat(document.getElementById("goalSaved").value) || 0;
+    if (!title || isNaN(target) || target <= 0) return alert("⚠️ Enter Goal Title and Target Amount.");
+
+    let existingIdx = db.goals.findIndex(g => g.title.toLowerCase() === title.toLowerCase());
+    if (existingIdx !== -1) {
+      db.goals[existingIdx].target = target;
+      db.goals[existingIdx].saved += saved;
+      alert(`✅ Added €${saved.toFixed(2)} to existing goal "${title}"!`);
+    } else {
+      db.goals.push({ title, target, saved });
+    }
+
+    document.getElementById("goalTitle").value = "";
+    document.getElementById("goalTarget").value = "";
+    document.getElementById("goalSaved").value = "";
+    saveDB();
+  }
+
+  function addMoneyToGoal(index) {
+    let addAmt = prompt(`How much € do you want to add to "${db.goals[index].title}"?`);
+    if (addAmt !== null && !isNaN(parseFloat(addAmt))) {
+      db.goals[index].saved += parseFloat(addAmt);
+      saveDB();
+    }
+  }
+
+  function deleteGoal(index) {
+    if (confirm("Delete this goal?")) {
+      db.goals.splice(index, 1);
+      saveDB();
+    }
+  }
+
+  // Docs
+  function saveDoc() {
+    let name = document.getElementById("docName").value.trim();
+    let exp = document.getElementById("docExpiry").value;
+    let fileInput = document.getElementById("docFile");
+
+    if (!name || !exp) return alert("⚠️ Please enter Document Name and Expiry Date.");
+
+    if (fileInput.files && fileInput.files[0]) {
+      let file = fileInput.files[0];
+      if (file.size > 2.5 * 1024 * 1024) return alert("⚠️ File is too large! Please upload under 2.5 MB.");
+      let reader = new FileReader();
+      reader.onload = function(e) { upsertDoc(name, exp, e.target.result, file.type); };
+      reader.readAsDataURL(file);
+    } else {
+      upsertDoc(name, exp, null, null);
+    }
+  }
+
+  function upsertDoc(name, exp, fileData, fileType) {
+    let existingIdx = db.docs.findIndex(d => d.name.toLowerCase() === name.toLowerCase());
+    if (existingIdx !== -1) {
+      db.docs[existingIdx].exp = exp;
+      if (fileData) { db.docs[existingIdx].fileData = fileData; db.docs[existingIdx].fileType = fileType; }
+      alert(`✅ Updated document "${name}"!`);
+    } else {
+      db.docs.push({ name, exp, fileData, fileType });
+    }
+    resetDocForm();
+    saveDB();
+  }
+
+  function resetDocForm() {
+    document.getElementById("docName").value = "";
+    document.getElementById("docExpiry").value = "";
+    document.getElementById("docFile").value = "";
+  }
+
+  function viewDoc(index) {
+    let doc = db.docs[index];
+    if (!doc.fileData) return alert("No file attached.");
+    document.getElementById("modalTitle").innerText = doc.name;
+    let body = document.getElementById("modalBody");
+    if (doc.fileType === "application/pdf") body.innerHTML = `<iframe src="${doc.fileData}"></iframe>`;
+    else body.innerHTML = `<img src="${doc.fileData}" alt="${doc.name}">`;
+    document.getElementById("previewModal").style.display = "flex";
+  }
+
+  function closeModal(modalId, e) {
+    if (e.target.id === modalId) document.getElementById(modalId).style.display = "none";
+  }
+
+  function deleteDoc(index) {
+    if (confirm("Delete this document?")) { db.docs.splice(index, 1); saveDB(); }
+  }
+
+  function getExpiryStatus(expDateStr) {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let exp = new Date(expDateStr);
+    let diffDays = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return { text: `Expired (${Math.abs(diffDays)} days ago)`, cls: "badge-exp", urgent: true, diff: diffDays };
+    else if (diffDays <= 45) return { text: `Expires in ${diffDays} days!`, cls: "badge-warn", urgent: true, diff: diffDays };
+    else return { text: `Valid (${diffDays} days left)`, cls: "badge-ok", urgent: false, diff: diffDays };
+  }
+
+  // Appointments
+  function saveAppt() {
+    let title = document.getElementById("apptTitle").value.trim();
+    let date = document.getElementById("apptDate").value;
+    let time = document.getElementById("apptTime").value;
+    let location = document.getElementById("apptLocation").value.trim();
+
+    if (!title || !date) return alert("⚠️ Enter Appointment Purpose and Date.");
+
+    db.appts.push({ title, date, time, location });
+    db.appts.sort((a, b) => new Date(a.date) - new Date(b.date));
+    document.getElementById("apptTitle").value = "";
+    document.getElementById("apptDate").value = "";
+    document.getElementById("apptTime").value = "";
+    document.getElementById("apptLocation").value = "";
+    saveDB();
+  }
+
+  function deleteAppt(index) {
+    if (confirm("Remove this appointment?")) { db.appts.splice(index, 1); saveDB(); }
+  }
+
+  // Lawyer Info
+  function saveLawyer() {
+    db.lawyer = {
+      name: document.getElementById("lawyerName").value.trim(),
+      phone: document.getElementById("lawyerPhone").value.trim(),
+      address: document.getElementById("lawyerAddress").value.trim(),
+      note: document.getElementById("lawyerNote").value.trim()
+    };
+    saveDB();
+    alert("✅ Lawyer details saved!");
+  }
+
+  // Backup & Restore
+  function exportBackup() {
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+    let dl = document.createElement("a");
+    dl.setAttribute("href", dataStr);
+    dl.setAttribute("download", `ProbashiMate_Backup_${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(dl);
+    dl.click();
+    dl.remove();
+  }
+
+  function importBackup(event) {
+    let file = event.target.files[0];
+    if (!file) return;
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        let parsed = JSON.parse(e.target.result);
+        if (parsed && typeof parsed === "object") {
+          db = parsed;
+          if (typeof db.cash !== "number") db.cash = 0;
+          if (!Array.isArray(db.expenses)) db.expenses = [];
+          if (!Array.isArray(db.loans)) db.loans = [];
+          saveDB();
+          alert("✅ Backup restored successfully!");
+        }
+      } catch (err) { alert("❌ Invalid backup file."); }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetAll() {
+    if (confirm("⚠️ Are you sure? This will delete ALL data!")) {
+      localStorage.removeItem("probashiEssentialDB");
+      location.reload();
+    }
+  }
+
+  // Expense Summary Tab
+  function clearSummaryDateFilter() {
+    document.getElementById("summaryDatePicker").value = "";
+    renderExpenseSummary();
+  }
+
+  function renderExpenseSummary() {
+    let selectedDate = document.getElementById("summaryDatePicker").value;
+    let runningMonth = new Date().toISOString().slice(0, 7);
+    let monthLabel = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
+    let filtered = [];
+    if (selectedDate) {
+      filtered = db.expenses.filter(e => e.date === selectedDate);
+      document.getElementById("summaryHeading").innerText = `📅 Expense on ${selectedDate}`;
+      document.getElementById("summarySubtext").innerText = `Showing expenses for ${selectedDate}. Click "This Month" to return.`;
+      document.getElementById("sumTotalLabel").innerText = `Total Spent on ${selectedDate}`;
+      document.getElementById("breakdownHeading").innerText = `📍 Where You Spent on ${selectedDate}`;
+      document.getElementById("resetDateFilterBtn").style.display = "inline-block";
+      document.getElementById("dateDetailsCard").style.display = "block";
+      document.getElementById("dateDetailsHeading").innerText = `🧾 Transactions on ${selectedDate}`;
+    } else {
+      filtered = db.expenses.filter(e => e.date && e.date.startsWith(runningMonth));
+      document.getElementById("summaryHeading").innerText = `📊 ${monthLabel} Summary`;
+      document.getElementById("summarySubtext").innerText = `Running month summary (Banks + Cash).`;
+      document.getElementById("sumTotalLabel").innerText = `Total Spent in ${monthLabel}`;
+      document.getElementById("breakdownHeading").innerText = `📍 Where You Spent in ${monthLabel}`;
+      document.getElementById("resetDateFilterBtn").style.display = "none";
+      document.getElementById("dateDetailsCard").style.display = "none";
+    }
+
+    let totalPeriod = 0, totalBankSpent = 0, totalCashSpent = 0;
+    let categoryMap = {};
+
+    filtered.forEach(e => {
+      totalPeriod += e.amount;
+      if (e.sourceType === "cash") totalCashSpent += e.amount;
+      else totalBankSpent += e.amount;
+      let key = e.where.trim();
+      categoryMap[key] = (categoryMap[key] || 0) + e.amount;
+    });
+
+    document.getElementById("sumPeriodTotal").innerText = `€${totalPeriod.toFixed(2)}`;
+    document.getElementById("sumPeriodBank").innerText = `€${totalBankSpent.toFixed(2)}`;
+    document.getElementById("sumPeriodCash").innerText = `€${totalCashSpent.toFixed(2)}`;
+
+    let sortedCats = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
+    let catHTML = "";
+    sortedCats.forEach(([cat, amt]) => {
+      let pct = totalPeriod > 0 ? (amt / totalPeriod) * 100 : 0;
+      catHTML += `
+        <div style="margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px;">
+            <strong>${cat}</strong>
+            <span><b style="color:var(--danger);">€${amt.toFixed(2)}</b> (${pct.toFixed(0)}%)</span>
+          </div>
+          <div class="progress-bar"><div class="progress-bar-inner spend" style="width:${pct}%"></div></div>
+        </div>`;
+    });
+    document.getElementById("sumCategoryBreakdown").innerHTML = catHTML || `<p style="font-size:13px; color:var(--text-muted);">No expenses recorded.</p>`;
+
+    if (selectedDate) {
+      let histHTML = "";
+      filtered.forEach(e => {
+        histHTML += `
+          <div class="item-row">
+            <div class="item-header">
+              <div>
+                <strong>${e.where}</strong>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+                  <span class="badge badge-src">${e.sourceType === 'cash' ? '💵 ' : '💳 '}${e.sourceName}</span>
+                </div>
+              </div>
+              <div style="text-align:right; display:flex; align-items:center; gap:8px;">
+                <strong style="color:var(--danger); font-size:15px;">-€${e.amount.toFixed(2)}</strong>
+                <button class="small-btn danger" onclick="deleteExpense(${e.id})">🗑️</button>
+              </div>
+            </div>
+          </div>`;
+      });
+      document.getElementById("sumDateHistory").innerHTML = histHTML || `<p style="font-size:13px; color:var(--text-muted);">No transactions found.</p>`;
+    }
+  }
+
+  // Render All UI
+  function renderAll() {
+    // Cash
+    document.getElementById("cashDisplay").innerText = `€${db.cash.toFixed(2)}`;
+    document.getElementById("dashTotalCash").innerText = `€${db.cash.toFixed(2)}`;
+
+    // Banks
+    let totalBank = 0;
+    let bankHTML = "";
+    db.banks.forEach((b, i) => {
+      totalBank += b.bal;
+      bankHTML += `
+        <div class="bank-card">
+          <div class="bank-card-header">
+            <span class="bank-name">${b.name}</span>
+            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+              <button class="small-btn success" onclick="quickDepositBank(${i})">+ Add €</button>
+              <button class="small-btn danger" onclick="openSpendModal('bank', ${i})">- Spend €</button>
+              <button class="small-btn" onclick="editBankCard(${i})">✏️</button>
+              <button class="small-btn danger" onclick="deleteBank(${i})">🗑️</button>
+            </div>
+          </div>
+          <div class="card-num">${b.card || "No Card Number"}</div>
+          <div class="card-bal">€${b.bal.toFixed(2)}</div>
+        </div>`;
+    });
+    document.getElementById("bankList").innerHTML = bankHTML || `<p style="font-size:13px; color:var(--text-muted);">No bank cards added yet.</p>`;
+    document.getElementById("dashTotalBank").innerText = `€${totalBank.toFixed(2)}`;
+    document.getElementById("dashGrandTotal").innerText = `€${(totalBank + db.cash).toFixed(2)}`;
+
+    // This month spent on dashboard
+    let nowMonth = new Date().toISOString().slice(0, 7);
+    let thisMonthSpent = db.expenses
+      .filter(e => e.date && e.date.startsWith(nowMonth))
+      .reduce((acc, cur) => acc + cur.amount, 0);
+    document.getElementById("dashMonthSpent").innerText = `€${thisMonthSpent.toFixed(2)}`;
+
+    renderExpenseSummary();
+
+    // Lent & Borrow (Loans)
+    let loanHTML = "";
+    db.loans.forEach((l, i) => {
+      let isPabo = l.type === "pabo";
+      loanHTML += `
+        <div class="item-row">
+          <div class="item-header">
+            <div>
+              <strong>👤 ${l.person}</strong>
+              <div style="font-size:13px; margin:4px 0;">
+                <span class="badge ${isPabo ? 'badge-pabo' : 'badge-dibo'}">${isPabo ? '🟢 Kar kache Pabo (Lent)' : '🔴 Kar kache Dibo (Borrowed)'}</span>
+              </div>
+              <div style="font-size:16px; font-weight:bold; color:${isPabo ? 'var(--success)' : 'var(--danger)'};">€${l.amt.toFixed(2)}</div>
+              ${l.note ? `<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📝 ${l.note}</div>` : ""}
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <button class="small-btn success" onclick="openSettleModal(${i})">${isPabo ? '📥 Received' : '📤 Paid / Return'}</button>
+              <button class="small-btn danger" onclick="deleteLoan(${i})">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>`;
+    });
+    document.getElementById("loanList").innerHTML = loanHTML || `<p style="font-size:13px; color:var(--text-muted);">No active lent or borrow records.</p>`;
+
+    // Piggy Bank
+    let totalPiggy = 0;
+    let goalHTML = "";
+    db.goals.forEach((g, i) => {
+      totalPiggy += g.saved;
+      let pct = Math.min(100, (g.saved / g.target) * 100);
+      goalHTML += `
+        <div class="item-row">
+          <div class="item-header">
+            <div>
+              <strong>🎯 ${g.title}</strong>
+              <div style="font-size:13px; color:var(--text-muted); margin-top:3px;">Saved: <b style="color:var(--success);">€${g.saved.toFixed(2)}</b> / €${g.target.toFixed(2)} (${pct.toFixed(0)}%)</div>
+            </div>
+            <div>
+              <button class="small-btn success" onclick="addMoneyToGoal(${i})">+ Add €</button>
+              <button class="small-btn danger" onclick="deleteGoal(${i})">🗑️</button>
+            </div>
+          </div>
+          <div class="progress-bar"><div class="progress-bar-inner" style="width:${pct}%"></div></div>
+        </div>`;
+    });
+    document.getElementById("goalList").innerHTML = goalHTML || `<p style="font-size:13px; color:var(--text-muted);">No dream goals set yet.</p>`;
+    document.getElementById("dashTotalPiggy").innerText = `€${totalPiggy.toFixed(2)}`;
+
+    // Documents
+    let docHTML = "", dashDocHTML = "", alertHTML = "";
+    db.docs.forEach((d, i) => {
+      let st = getExpiryStatus(d.exp);
+      if (st.urgent) alertHTML += `<div class="alert-banner ${st.diff >= 0 ? 'warning' : ''}">⚠️ <b>${d.name}</b>: ${st.text} (Exp: ${d.exp})</div>`;
+      dashDocHTML += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);"><span>${d.name}</span><span class="badge ${st.cls}">${st.text}</span></div>`;
+      docHTML += `
+        <div class="item-row">
+          <div class="item-header">
+            <div>
+              <strong>${d.name}</strong>
+              <div style="font-size:12px; color:var(--text-muted); margin:4px 0;">Expiry: ${d.exp}</div>
+              <span class="badge ${st.cls}">${st.text}</span>
+            </div>
+            <div style="display:flex; gap:5px;">
+              ${d.fileData ? `<button class="small-btn" onclick="viewDoc(${i})">👁️ View</button>` : ""}
+              <button class="small-btn danger" onclick="deleteDoc(${i})">🗑️</button>
+            </div>
+          </div>
+        </div>`;
+    });
+    document.getElementById("expiryAlertsArea").innerHTML = alertHTML;
+    document.getElementById("docList").innerHTML = docHTML || `<p style="font-size:13px; color:var(--text-muted);">No documents uploaded.</p>`;
+    document.getElementById("dashDocStatus").innerHTML = dashDocHTML || "No documents added yet.";
+
+    // Appointments
+    let apptHTML = "", dashApptHTML = "";
+    db.appts.forEach((a, i) => {
+      apptHTML += `
+        <div class="item-row">
+          <div class="item-header">
+            <div>
+              <strong>📌 ${a.title}</strong>
+              <div style="font-size:13px; color:var(--accent); margin-top:3px;">🗓️ ${a.date} ${a.time ? 'at ' + a.time : ''}</div>
+              ${a.location ? `<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${a.location}</div>` : ""}
+            </div>
+            <button class="small-btn danger" onclick="deleteAppt(${i})">🗑️</button>
+          </div>
+        </div>`;
+      if (i < 3) dashApptHTML += `<div style="padding:6px 0; border-bottom:1px solid var(--border);"><b>${a.title}</b> — <span style="color:var(--accent);">${a.date} ${a.time || ''}</span></div>`;
+    });
+    document.getElementById("apptList").innerHTML = apptHTML || `<p style="font-size:13px; color:var(--text-muted);">No appointments scheduled.</p>`;
+    document.getElementById("dashApptList").innerHTML = dashApptHTML || "No upcoming appointments.";
+
+    // Lawyer Info
+    document.getElementById("lawyerName").value = db.lawyer.name || "";
+    document.getElementById("lawyerPhone").value = db.lawyer.phone || "";
+    document.getElementById("lawyerAddress").value = db.lawyer.address || "";
+    document.getElementById("lawyerNote").value = db.lawyer.note || "";
+
+    if (db.lawyer.name || db.lawyer.phone) {
+      document.getElementById("lawyerDisplay").innerHTML = `
+        <div class="item-row">
+          <strong>👨‍⚖️ ${db.lawyer.name || 'Advocate'}</strong>
+          ${db.lawyer.address ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">📍 ${db.lawyer.address}</div>` : ""}
+          ${db.lawyer.note ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">📝 ${db.lawyer.note}</div>` : ""}
+          ${db.lawyer.phone ? `<button class="submit-btn" style="background:var(--success); color:#000; margin-top:10px;" onclick="window.location.href='tel:${db.lawyer.phone}'">📞 Call Lawyer (${db.lawyer.phone})</button>` : ""}
+        </div>`;
+    } else {
+      document.getElementById("lawyerDisplay").innerHTML = "";
+    }
+  }
+
+  renderAll();
+</script>
+</body>
+</html>
